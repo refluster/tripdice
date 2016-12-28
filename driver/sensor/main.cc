@@ -22,13 +22,14 @@ int main()
 	fd = wiringPiI2CSetup(0x68);
 	printf("setup return : %d\n", fd);
 
-	raw_gyro_data[0] = wiringPiI2CReadReg16(fd, 0x43);
-	raw_gyro_data[1] = wiringPiI2CReadReg16(fd, 0x45);
-	raw_gyro_data[2] = wiringPiI2CReadReg16(fd, 0x47);
-
-	printf("gyro_x : %d\n", raw_gyro_data[0]);
-	printf("gyro_y : %d\n", raw_gyro_data[1]);
-	printf("gyro_z : %d\n", raw_gyro_data[2]);
+	while (1) {
+		raw_gyro_data[0] = wiringPiI2CReadReg16(fd, 0x43);
+		raw_gyro_data[1] = wiringPiI2CReadReg16(fd, 0x45);
+		raw_gyro_data[2] = wiringPiI2CReadReg16(fd, 0x47);
+		printf("gyro_x : %6d %6d %6d\n",
+			   raw_gyro_data[0], raw_gyro_data[1], raw_gyro_data[2]);	
+		delay(200);
+	}
 
 	return 0;
 }
