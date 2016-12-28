@@ -23,10 +23,10 @@ int main()
 	printf("setup return : %d\n", fd);
 
 	while (1) {
-		raw_gyro_data[0] = wiringPiI2CReadReg16(fd, 0x43);
-		raw_gyro_data[1] = wiringPiI2CReadReg16(fd, 0x45);
-		raw_gyro_data[2] = wiringPiI2CReadReg16(fd, 0x47);
-		printf("gyro_x : %6d %6d %6d\n",
+		raw_gyro_data[0] = (wiringPiI2CReadReg8(fd, 0x3b) << 8) | wiringPiI2CReadReg8(fd, 0x3c);
+		raw_gyro_data[1] = (wiringPiI2CReadReg8(fd, 0x3d) << 8) | wiringPiI2CReadReg8(fd, 0x3e);
+		raw_gyro_data[2] = (wiringPiI2CReadReg8(fd, 0x3f) << 8) | wiringPiI2CReadReg8(fd, 0x40);
+		printf("accel : %6d %6d %6d\n",
 			   raw_gyro_data[0], raw_gyro_data[1], raw_gyro_data[2]);	
 		delay(200);
 	}
