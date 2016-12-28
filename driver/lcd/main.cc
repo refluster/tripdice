@@ -5,10 +5,10 @@
 #define ROW 320
 #define COL 240
 
-#define pin_CS 2
-#define pin_SDA 3
-#define pin_SCL 4
-#define pin_RST 5
+#define pin_CS 8
+#define pin_SDA 10
+#define pin_SCL 11
+#define pin_RST 20
 
 void  SendDataSPI(unsigned char dat)
 
