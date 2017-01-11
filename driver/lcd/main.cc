@@ -176,6 +176,23 @@ void DispColor(unsigned int color1)
 	digitalWrite(pin_CS, 1);
 }
 
+void DispGradColor()
+{
+	//f8 7e 1f
+	//11  5  0
+
+	unsigned int i,j;
+	digitalWrite(pin_CS, 0);
+	BlockWrite(0,COL-1,0,ROW-1);
+	for(i=0;i<ROW;i++){
+		for(j=0;j<COL;j++){   
+			int color = ((i / 5) << 11) | ((j / 5) << 5);
+			WriteData(color);
+		}
+	}
+	digitalWrite(pin_CS, 1);
+}
+
 void setup() { 
 	int channel = 0;
 	int speed = 1000000;
@@ -242,6 +259,10 @@ void loop() {
 	puts("WHITE end");
 
 	delay(1000);
+
+	puts("grad start");
+	DispGradColor();
+	puts("grad end");
 }
 
 int main() {
