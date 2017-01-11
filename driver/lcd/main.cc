@@ -5,7 +5,7 @@
 #define ROW 320
 #define COL 240
 
-#define pin_CS 8
+#define pin_CS 5
 #define pin_SDA 10
 #define pin_SCL 11
 #define pin_RST 20
@@ -177,21 +177,24 @@ void setup() {
 	int channel = 0;
 	int speed = 1000000;
 
+	if (wiringPiSPISetup(channel, speed) < 0) {
+		printf("wiringPiSPISetup error \n");
+		return;
+	}
+
 	// Initialize WiringPi
 	if(wiringPiSetupGpio() == -1) {
 		printf("wiringPi setup error");
 		return;
 	}
 
-	wiringPiSPISetup(channel, speed) ;
-
 //	Serial.begin(9600);
 //	Serial.println("setup start");
 	puts("setup start");
 
 	pinMode(pin_CS, OUTPUT);
-	pinMode(pin_SDA, OUTPUT);
-	pinMode(pin_SCL, OUTPUT);
+//	pinMode(pin_SDA, OUTPUT);
+//	pinMode(pin_SCL, OUTPUT);
 	pinMode(pin_RST, OUTPUT);
 
 	LCD_Init();
