@@ -178,9 +178,6 @@ void DispColor(unsigned int color1)
 
 void DispGradColor()
 {
-	//f8 7e 1f
-	//11  5  0
-
 	unsigned int i,j;
 	digitalWrite(pin_CS, 0);
 	BlockWrite(0,COL-1,0,ROW-1);
@@ -210,8 +207,6 @@ void setup() {
 		return;
 	}
 
-//	Serial.begin(9600);
-//	Serial.println("setup start");
 	puts("setup start");
 
 	pinMode(pin_CS, OUTPUT);
@@ -223,39 +218,30 @@ void setup() {
 
 	LCD_Init();
 
-//	Serial.println("setup end");
 	puts("setup end");
 }
 
 void loop() {
-//	Serial.println("RED start");
 	puts("RED start");
 	DispColor(0xf800);   //RED
-//	Serial.println("RED end");
 	puts("RED end");
 
 	delay(1000);
 
-//	Serial.println("GREEN start");
 	puts("GREEN start");
 	DispColor(0x07e0);   //GREEN
-//	Serial.println("GREEN end");
 	puts("GREEN end");
 
 	delay(1000);
 
-//	Serial.println("BLUE start");
 	puts("BLUE start");
 	DispColor(0x001f);   //BLUE
-//	Serial.println("BLUE end");
 	puts("BLUE end");
 
 	delay(1000);
 
-//	Serial.println("WHITE start");
 	puts("WHITE start");
 	DispColor(0xffff);   //WHITE   
-//	Serial.println("WHITE end");
 	puts("WHITE end");
 
 	delay(1000);
