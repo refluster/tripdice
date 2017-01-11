@@ -12,9 +12,7 @@
 
 #define SOFT_SPI
 
-void  SendDataSPI(unsigned char dat)
-
-{ 
+void SendDataSPI(unsigned char dat) {
 	int channel = 0;
 	int length = 1;
 
@@ -23,8 +21,8 @@ void  SendDataSPI(unsigned char dat)
 
 #else
 	unsigned char i;
-	for(i=0; i<8; i++){ 
-		if( (dat&0x80)!=0 ){
+	for(i = 0; i < 8; i++) {
+		if ((dat & 0x80) != 0) {
 			digitalWrite(pin_SDA, 1);
 		}
 		else{
@@ -37,37 +35,28 @@ void  SendDataSPI(unsigned char dat)
 #endif
 }
 
-
-
-void WriteComm(unsigned int i)
-{
+void WriteComm(unsigned int i) {
 	digitalWrite(pin_CS, 0);
 	SendDataSPI(0x70);
-	SendDataSPI(i>>8);
+	SendDataSPI(i >> 8);
 	SendDataSPI(i);
 	digitalWrite(pin_CS, 1);
 }
 
-void WriteData(unsigned int i)
-{
+void WriteData(unsigned int i) {
 	digitalWrite(pin_CS, 0);
 	SendDataSPI(0x72);
-	SendDataSPI(i>>8);
+	SendDataSPI(i >> 8);
 	SendDataSPI(i);
 	digitalWrite(pin_CS, 1);
 }
 
-
-
-
-void LCD_CtrlWrite_ILI9325C(unsigned int com,unsigned int dat)
-{
+void LCD_CtrlWrite_ILI9325C(unsigned int com, unsigned int dat) {
 	WriteComm(com);
 	WriteData(dat);
 }
 
-void LCD_Init(void)
-{
+void LCD_Init(void) {
 	digitalWrite(pin_RST, 1);
 
 	delay(100);
@@ -78,12 +67,12 @@ void LCD_Init(void)
 	delay(500);
  
 //	LCD_CtrlWrite_ILI9325C(0x00E5, 0x78F0);     // set SRAM internal timing
-	LCD_CtrlWrite_ILI9325C(0x0001, 0x0000);     // s et SS and SM bit
-	LCD_CtrlWrite_ILI9325C(0x0002, 0x0400);     // s et 1 line inversion
-	LCD_CtrlWrite_ILI9325C(0x0003, 0x1090);     // s et GRAM write direction and BGR=1. 
+	LCD_CtrlWrite_ILI9325C(0x0001, 0x0000);     // set SS and SM bit
+	LCD_CtrlWrite_ILI9325C(0x0002, 0x0400);     // set 1 line inversion
+	LCD_CtrlWrite_ILI9325C(0x0003, 0x1090);     // set GRAM write direction and BGR=1.
 	LCD_CtrlWrite_ILI9325C(0x0004, 0x0000);     // Resize register
-	LCD_CtrlWrite_ILI9325C(0x0008, 0x0202);     // s et the back porch and front porch
-	LCD_CtrlWrite_ILI9325C(0x0009, 0x0000);     // s et non-display area refresh cycle ISC[3:0]
+	LCD_CtrlWrite_ILI9325C(0x0008, 0x0202);     // set the back porch and front porch
+	LCD_CtrlWrite_ILI9325C(0x0009, 0x0000);     // set non-display area refresh cycle ISC[3:0]
 	LCD_CtrlWrite_ILI9325C(0x000A, 0x0000);     // FMARK function
 	LCD_CtrlWrite_ILI9325C(0x000C, 0x0000);     // RGB interface setting
 	LCD_CtrlWrite_ILI9325C(0x000D, 0x0000);     // Frame marker Position
@@ -144,15 +133,11 @@ void LCD_Init(void)
 	LCD_CtrlWrite_ILI9325C(0x0007, 0x0133);      // 262K color and display ON
 }
 
-
-
-
-void BlockWrite(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsigned int Yend)
-{
-	WriteComm(0x0050);WriteData(Xstart);
-	WriteComm(0x0051);WriteData(Xend); 
-	WriteComm(0x0052);WriteData(Ystart);   
-	WriteComm(0x0053);WriteData(Yend);  
+void BlockWrite(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsigned int Yend) {
+	WriteComm(0x0050); WriteData(Xstart);
+	WriteComm(0x0051); WriteData(Xend);
+	WriteComm(0x0052); WriteData(Ystart);
+	WriteComm(0x0053); WriteData(Yend);
 	WriteComm(0x0020);
 	WriteData(Xstart);
 	WriteComm(0x0021);
@@ -160,29 +145,24 @@ void BlockWrite(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsign
 	WriteComm(0x0022);
 }
 
-
-
-
-void DispColor(unsigned int color1)
-{
-	unsigned int i,j;
+void DispColor(unsigned int color) {
+	unsigned int i, j;
 	digitalWrite(pin_CS, 0);
-	BlockWrite(0,COL-1,0,ROW-1);
-	for(i=0;i<ROW;i++){
-		for(j=0;j<COL;j++){   
-			WriteData(color1);
+	BlockWrite(0, COL - 1, 0, ROW - 1);
+	for(i = 0; i < ROW; i++) {
+		for(j = 0; j < COL; j++) {
+			WriteData(color);
 		}
 	}
 	digitalWrite(pin_CS, 1);
 }
 
-void DispGradColor()
-{
-	unsigned int i,j;
+void DispGradColor() {
+	unsigned int i, j;
 	digitalWrite(pin_CS, 0);
-	BlockWrite(0,COL-1,0,ROW-1);
-	for(i=0;i<ROW;i++){
-		for(j=0;j<COL;j++){   
+	BlockWrite(0, COL - 1, 0, ROW - 1);
+	for(i = 0; i < ROW; i++) {
+		for(j = 0; j < COL; j++) {
 			int color = ((i / 5) << 11) | ((j / 5) << 5);
 			WriteData(color);
 		}
@@ -190,7 +170,7 @@ void DispGradColor()
 	digitalWrite(pin_CS, 1);
 }
 
-void setup() { 
+void setup() {
 	int channel = 0;
 	int speed = 1000000;
 
