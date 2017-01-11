@@ -10,15 +10,18 @@
 #define pin_SCL 11
 #define pin_RST 20
 
+#define SOFT_SPI
+
 void  SendDataSPI(unsigned char dat)
 
 { 
 	int channel = 0;
 	int length = 1;
 
-//	wiringPiSPIDataRW(channel, &dat, length) ;
+#ifndef SOFT_SPI
+	wiringPiSPIDataRW(channel, &dat, length) ;
 
-//*
+#else
 	unsigned char i;
 	for(i=0; i<8; i++){ 
 		if( (dat&0x80)!=0 ){
@@ -29,11 +32,9 @@ void  SendDataSPI(unsigned char dat)
 		}
 		dat <<= 1;
 		digitalWrite(pin_SCL, 0);
-//		delayMicroseconds(1);
 		digitalWrite(pin_SCL, 1);     
-//		delayMicroseconds(1);
 	}
-//*/
+#endif
 }
 
 
@@ -179,12 +180,12 @@ void setup() {
 	int channel = 0;
 	int speed = 1000000;
 
-/*
+#ifndef SOFT_SPI
 	if (wiringPiSPISetup(channel, speed) < 0) {
 		printf("wiringPiSPISetup error \n");
 		return;
 	}
-*/
+#endif
 
 	// Initialize WiringPi
 	if(wiringPiSetupGpio() == -1) {
@@ -197,9 +198,11 @@ void setup() {
 	puts("setup start");
 
 	pinMode(pin_CS, OUTPUT);
+	pinMode(pin_RST, OUTPUT);
+#ifdef SOFT_SPI
 	pinMode(pin_SDA, OUTPUT);
 	pinMode(pin_SCL, OUTPUT);
-	pinMode(pin_RST, OUTPUT);
+#endif
 
 	LCD_Init();
 
