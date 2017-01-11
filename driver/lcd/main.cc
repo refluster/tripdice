@@ -16,9 +16,9 @@ void  SendDataSPI(unsigned char dat)
 	int channel = 0;
 	int length = 1;
 
-	wiringPiSPIDataRW(channel, &dat, length) ;
+//	wiringPiSPIDataRW(channel, &dat, length) ;
 
-/*
+//*
 	unsigned char i;
 	for(i=0; i<8; i++){ 
 		if( (dat&0x80)!=0 ){
@@ -29,9 +29,11 @@ void  SendDataSPI(unsigned char dat)
 		}
 		dat <<= 1;
 		digitalWrite(pin_SCL, 0);
+//		delayMicroseconds(1);
 		digitalWrite(pin_SCL, 1);     
+//		delayMicroseconds(1);
 	}
-*/
+//*/
 }
 
 
@@ -177,10 +179,12 @@ void setup() {
 	int channel = 0;
 	int speed = 1000000;
 
+/*
 	if (wiringPiSPISetup(channel, speed) < 0) {
 		printf("wiringPiSPISetup error \n");
 		return;
 	}
+*/
 
 	// Initialize WiringPi
 	if(wiringPiSetupGpio() == -1) {
@@ -193,8 +197,8 @@ void setup() {
 	puts("setup start");
 
 	pinMode(pin_CS, OUTPUT);
-//	pinMode(pin_SDA, OUTPUT);
-//	pinMode(pin_SCL, OUTPUT);
+	pinMode(pin_SDA, OUTPUT);
+	pinMode(pin_SCL, OUTPUT);
 	pinMode(pin_RST, OUTPUT);
 
 	LCD_Init();
