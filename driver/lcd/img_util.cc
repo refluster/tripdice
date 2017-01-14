@@ -135,7 +135,6 @@ void free_image(image_t *img) {
 int main() {
 	FILE *fp;
 
-	fp = fopen("test.jpg", "r");
-	read_jpeg_stream(fp);
+	read_jpeg_file("test.jpg");
 }
 
