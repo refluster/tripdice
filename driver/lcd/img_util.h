@@ -15,7 +15,29 @@
 #define IMAGE_H_
 #include <stdio.h>
 #include <stdint.h>
-#include "def.h"
+
+#ifdef _DEBUG_
+#define ERR(fmt, ...) fprintf(stderr, "\033[31m[%-15.15s:%4u] " fmt "\033[0m\n", __FILE__, __LINE__, ##__VA_ARGS__)
+#define DBG(fmt, ...) fprintf(stderr, "\033[33m[%-15.15s:%4u] " fmt "\033[0m\n", __FILE__, __LINE__, ##__VA_ARGS__)
+#define LOG(fmt, ...) fprintf(stderr, "[%-15.15s:%4u] " fmt "\n", __FILE__, __LINE__, ##__VA_ARGS__)
+#define PRT(fmt, ...) fprintf(stderror, fmt, ##__VA_ARGS__)
+#else
+#define ERR(fmt, ...)
+#define DBG(fmt, ...)
+#define LOG(fmt, ...)
+#define PRT(fmt, ...)
+#endif
+
+#define TRUE  1
+#define FALSE 0
+
+/**
+ * @brief 成功失敗を表現する
+ */
+typedef enum result_t {
+  SUCCESS = 0, /**< 成功 */
+  FAILURE = -1, /**< 失敗 */
+} result_t;
 
 #define COLOR_TYPE_INDEX 0   /**< インデックスカラー方式 */
 #define COLOR_TYPE_GRAY  1   /**< グレースケール方式 */
