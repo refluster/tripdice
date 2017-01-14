@@ -16,7 +16,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <jpeglib.h>
-#include "image.h"
+#include "img_util.h"
 #include <setjmp.h>
 
 /**
@@ -83,7 +83,7 @@ image_t *read_jpeg_stream(FILE *fp) {
     goto error;
   }
   stride = sizeof(JSAMPLE) * jpegd.output_width * jpegd.output_components;
-  if ((buffer = calloc(stride, 1)) == NULL) {
+  if ((buffer = (JSAMPROW)calloc(stride, 1)) == NULL) {
     goto error;
   }
   if ((img = allocate_image(jpegd.output_width, jpegd.output_height,
@@ -98,7 +98,12 @@ image_t *read_jpeg_stream(FILE *fp) {
       img->map[y][x].c.g = *row++;
       img->map[y][x].c.b = *row++;
       img->map[y][x].c.a = 0xff;
+	printf("(%3d,%3d,%3d)\n", 
+      img->map[y][x].c.r,
+      img->map[y][x].c.g,
+      img->map[y][x].c.b);
     }
+	break;
   }
   jpeg_finish_decompress(&jpegd);
   result = SUCCESS;
@@ -111,3 +116,57 @@ image_t *read_jpeg_stream(FILE *fp) {
   }
   return img;
 }
+
+image_t *allocate_image(uint32_t width, uint32_t height, uint8_t type) {
+  uint32_t i;
+  image_t *img;
+  if ((img = (image_t*)calloc(1, sizeof(image_t))) == NULL) {
+    return NULL;
+  }
+  img->width = width;
+  img->height = height;
+  img->color_type = type;
+  if (type == COLOR_TYPE_INDEX) {
+    if ((img->palette = (color_t*)calloc(256, sizeof(color_t))) == NULL) {
+      goto error;
+    }
+  } else {
+    img->palette = NULL;
+  }
+  img->palette_num = 0;
+  if ((img->map = (pixcel_t**)calloc(height, sizeof(pixcel_t*))) == NULL) {
+    goto error;
+  }
+  for (i = 0; i < height; i++) {
+    if ((img->map[i] = (pixcel_t*)calloc(width, sizeof(pixcel_t))) == NULL) {
+      goto error;
+    }
+  }
+  return img;
+  error:
+  free_image(img);
+  return NULL;
+}
+
+void free_image(image_t *img) {
+  uint32_t i;
+  if (img == NULL) {
+    return;
+  }
+  if (img->palette != NULL) {
+    free(img->palette);
+  }
+  for (i = 0; i < img->height; i++) {
+    free(img->map[i]);
+  }
+  free(img->map);
+  free(img);
+}
+
+int main() {
+	FILE *fp;
+
+	fp = fopen("test.jpg", "r");
+	read_jpeg_stream(fp);
+}
+
