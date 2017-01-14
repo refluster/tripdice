@@ -133,8 +133,6 @@ void free_image(image_t *img) {
 }
 
 int main() {
-	FILE *fp;
-
 	read_jpeg_file("test.jpg");
 }
 
