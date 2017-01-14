@@ -1,16 +1,3 @@
-/**
- * @file jpeg.c
- *
- * Copyright(c) 2015 大前良介(OHMAE Ryosuke)
- *
- * This software is released under the MIT License.
- * http://opensource.org/licenses/MIT
- *
- * @brief JPEGファイルの読み書き処理
- * @author <a href="mailto:ryo@mm2d.net">大前良介(OHMAE Ryosuke)</a>
- * @date 2015/02/07
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -19,29 +6,17 @@
 #include "img_util.h"
 #include <setjmp.h>
 
-/**
- * jpeg_error_mgrの拡張。
- */
 typedef struct my_error_mgr {
   struct jpeg_error_mgr jerr;
   jmp_buf jmpbuf;
 } my_error_mgr;
 
-/**
- * 致命的エラー発生時の処理。
- */
 static void error_exit(j_common_ptr cinfo) {
   my_error_mgr *err = (my_error_mgr *) cinfo->err;
   (*cinfo->err->output_message)(cinfo);
   longjmp(err->jmpbuf, 1);
 }
 
-/**
- * @brief JPEG形式のファイルを読み込む。
- *
- * @param[in] filename ファイル名
- * @return 読み込んだ画像、読み込みに失敗した場合NULL
- */
 image_t *read_jpeg_file(const char *filename) {
   FILE *fp;
   if ((fp = fopen(filename, "rb")) == NULL) {
@@ -53,12 +28,6 @@ image_t *read_jpeg_file(const char *filename) {
   return img;
 }
 
-/**
- * @brief JPEG形式のファイルを読み込む。
- *
- * @param[in] fp ファイルストリーム
- * @return 読み込んだ画像、読み込みに失敗した場合NULL
- */
 image_t *read_jpeg_stream(FILE *fp) {
   result_t result = FAILURE;
   uint32_t x, y;
