@@ -40,9 +40,7 @@ typedef enum result_t {
 } result_t;
 
 enum {
-	COLOR_TYPE_GRAY = 0,   /**< グレースケール方式 */
-	COLOR_TYPE_RGB,   /**< RGB方式 */
-	COLOR_TYPE_RGBA,   /**< RGBA方式 */
+	COLOR_TYPE_RGB = 0,
 };
 
 /**
