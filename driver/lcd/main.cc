@@ -171,13 +171,13 @@ void DispGradColor() {
 	digitalWrite(pin_CS, 1);
 }
 
-void DispImage(image_t *img) {
+void DispImage(uint16_t *img) {
 	unsigned int i, j;
 	digitalWrite(pin_CS, 0);
 	BlockWrite(0, COL - 1, 0, ROW - 1);
 	for(i = 0; i < ROW; i++) {
 		for(j = 0; j < COL; j++) {
-			int color = img->bin[i*COL + j];
+			int color = img[i*COL + j];
 			WriteData(color);
 		}
 	}
@@ -217,7 +217,7 @@ void setup() {
 
 void loop() {
 	puts("img load begin");
-	image_t *img = read_jpeg_file("test.jpg", COLOR_TYPE_RGB);
+	uint16_t *img = read_jpeg_file("test.jpg", 0);
 	puts("img load complete");
 	DispImage(img);
 	puts("img display complete");
