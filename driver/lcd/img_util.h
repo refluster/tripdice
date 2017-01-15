@@ -1,16 +1,3 @@
-/**
- * @file image.h
- *
- * Copyright(c) 2015 大前良介(OHMAE Ryosuke)
- *
- * This software is released under the MIT License.
- * http://opensource.org/licenses/MIT
- *
- * @brief 画像を扱うための共通ヘッダ
- * @author <a href="mailto:ryo@mm2d.net">大前良介(OHMAE Ryosuke)</a>
- * @date 2015/02/07
- */
-
 #ifndef IMAGE_H_
 #define IMAGE_H_
 #include <stdio.h>
@@ -35,8 +22,8 @@
  * @brief 成功失敗を表現する
  */
 typedef enum result_t {
-  SUCCESS = 0, /**< 成功 */
-  FAILURE = -1, /**< 失敗 */
+	SUCCESS = 0, /**< 成功 */
+	FAILURE = -1, /**< 失敗 */
 } result_t;
 
 enum {
@@ -49,10 +36,10 @@ enum {
  * RGBAの色情報を保持する構造体
  */
 typedef struct color_t {
-  uint8_t r; /**< Red */
-  uint8_t g; /**< Green */
-  uint8_t b; /**< Blue */
-  uint8_t a; /**< Alpha */
+	uint8_t r; /**< Red */
+	uint8_t g; /**< Green */
+	uint8_t b; /**< Blue */
+	uint8_t a; /**< Alpha */
 } color_t;
 
 /**
@@ -63,9 +50,9 @@ typedef struct color_t {
  * 単体ではどの表現形式になっているかを判断することはできない。
  */
 typedef union pixcel_t {
-  color_t c; /**< RGBA */
-  uint8_t g; /**< グレースケール */
-  uint8_t i; /**< カラーインデックス */
+	color_t c; /**< RGBA */
+	uint8_t g; /**< グレースケール */
+	uint8_t i; /**< カラーインデックス */
 } pixcel_t;
 
 /**
@@ -78,10 +65,10 @@ typedef union pixcel_t {
  * 各行へのポインタを保持する配列へのポインタとなっている。
  */
 typedef struct image_t {
-  uint32_t width;       /**< 幅 */
-  uint32_t height;      /**< 高さ */
-  uint16_t color_type;  /**< 色表現の種別 */
-  pixcel_t **map;       /**< 画像データ */
+	uint32_t width;       /**< 幅 */
+	uint32_t height;      /**< 高さ */
+	uint16_t color_type;  /**< 色表現の種別 */
+	pixcel_t **map;       /**< 画像データ */
 } image_t;
 
 void dump_image_info(image_t *img);
