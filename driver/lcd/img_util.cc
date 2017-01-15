@@ -29,7 +29,7 @@ image_t *read_jpeg_file(const char *filename) {
 }
 
 image_t *read_jpeg_stream(FILE *fp) {
-	result_t result = FAILURE;
+	int success = 0;
 	uint32_t x, y;
 	struct jpeg_decompress_struct jpegd;
 	my_error_mgr myerr;
@@ -75,11 +75,11 @@ image_t *read_jpeg_stream(FILE *fp) {
 		break;
 	}
 	jpeg_finish_decompress(&jpegd);
-	result = SUCCESS;
+	success = 1;
 error:
 	jpeg_destroy_decompress(&jpegd);
 	free(buffer);
-	if (result != SUCCESS) {
+	if (!success) {
 		free_image(img);
 		img = NULL;
 	}
