@@ -121,9 +121,3 @@ void free_image(image_t *img) {
 	free(img->bin);
 	free(img);
 }
-
-/*
-int main() {
-	read_jpeg_file("test.jpg", COLOR_TYPE_RGB);
-}
-*/
