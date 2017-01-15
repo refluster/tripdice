@@ -1,6 +1,7 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <stdio.h>
+#include "img_util.h"
 
 #define ROW 320
 #define COL 240
@@ -170,6 +171,19 @@ void DispGradColor() {
 	digitalWrite(pin_CS, 1);
 }
 
+void DispImage(image_t *img) {
+	unsigned int i, j;
+	digitalWrite(pin_CS, 0);
+	BlockWrite(0, COL - 1, 0, ROW - 1);
+	for(i = 0; i < ROW; i++) {
+		for(j = 0; j < COL; j++) {
+			int color = img->bin[i*COL + j];
+			WriteData(color);
+		}
+	}
+	digitalWrite(pin_CS, 1);
+}
+
 void setup() {
 	int channel = 0;
 	int speed = 1000000;
@@ -202,6 +216,14 @@ void setup() {
 }
 
 void loop() {
+	puts("img load begin");
+	image_t *img = read_jpeg_file("test.jpg", COLOR_TYPE_RGB);
+	puts("img load complete");
+	DispImage(img);
+	puts("img display complete");
+
+	return;
+
 	puts("RED start");
 	DispColor(0xf800);   //RED
 	puts("RED end");
@@ -229,6 +251,7 @@ void loop() {
 	puts("grad start");
 	DispGradColor();
 	puts("grad end");
+
 }
 
 int main() {

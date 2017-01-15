@@ -37,6 +37,8 @@ image_t *read_jpeg_stream(FILE *fp, const int color_type) {
 	JSAMPROW buffer = NULL;
 	JSAMPROW row;
 	int stride;
+	uint16_t *wp;
+	uint8_t (*bmp)[3];
 	jpegd.err = jpeg_std_error(&myerr.jerr);
 	myerr.jerr.error_exit = error_exit;
 	if (setjmp(myerr.jmpbuf)) {
@@ -59,21 +61,28 @@ image_t *read_jpeg_stream(FILE *fp, const int color_type) {
 							  COLOR_TYPE_RGB)) == NULL) {
 		goto error;
 	}
+
+	// set rgb byte data
+	bmp = (uint8_t(*)[3])malloc(jpegd.output_width*jpegd.output_height*sizeof(uint8_t)*3);
 	for (y = 0; y < jpegd.output_height; y++) {
 		jpeg_read_scanlines(&jpegd, &buffer, 1);
 		row = buffer;
 		for (x = 0; x < jpegd.output_width; x++) {
-			img->map[y][x].c.r = *row++;
-			img->map[y][x].c.g = *row++;
-			img->map[y][x].c.b = *row++;
-			img->map[y][x].c.a = 0xff;
-			printf("(%3d,%3d,%3d)\n", 
-				   img->map[y][x].c.r,
-				   img->map[y][x].c.g,
-				   img->map[y][x].c.b);
+			bmp[y*jpegd.output_width + x][0] = *row++;
+			bmp[y*jpegd.output_width + x][1] = *row++;
+			bmp[y*jpegd.output_width + x][2] = *row++;
 		}
-		break;
 	}
+	// transposition pixel
+	wp = img->bin;
+	for (x = 0; x < jpegd.output_width; x++) {
+		for (y = 0; y < jpegd.output_height; y++) {
+			uint8_t *c = bmp[y*jpegd.output_width + x];
+			*wp = (((c[0] >> 3) << 11) | ((c[1] >> 2) << 5) | (c[2] >> 3));
+			wp++;
+		}
+	}
+	free(bmp);
 	jpeg_finish_decompress(&jpegd);
 	success = 1;
 error:
@@ -103,6 +112,9 @@ image_t *allocate_image(uint32_t width, uint32_t height, uint8_t type) {
 			goto error;
 		}
 	}
+	if ((img->bin = (uint16_t*)malloc(width*height*sizeof(uint16_t))) == NULL) {
+		goto error;
+	}
 	return img;
 error:
 	free_image(img);
@@ -118,9 +130,12 @@ void free_image(image_t *img) {
 		free(img->map[i]);
 	}
 	free(img->map);
+	free(img->bin);
 	free(img);
 }
 
+/*
 int main() {
 	read_jpeg_file("test.jpg", COLOR_TYPE_RGB);
 }
+*/
