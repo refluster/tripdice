@@ -17,18 +17,18 @@ static void error_exit(j_common_ptr cinfo) {
 	longjmp(err->jmpbuf, 1);
 }
 
-uint16_t *read_jpeg_file(const char *filename, const int color_type) {
+uint16_t *read_jpeg_file(const char *filename) {
 	FILE *fp;
 	if ((fp = fopen(filename, "rb")) == NULL) {
 		perror(filename);
 		return NULL;
 	}
-	uint16_t *img = read_jpeg_stream(fp, color_type);
+	uint16_t *img = read_jpeg_stream(fp);
 	fclose(fp);
 	return img;
 }
 
-uint16_t *read_jpeg_stream(FILE *fp, const int color_type) {
+uint16_t *read_jpeg_stream(FILE *fp) {
 	int success = 0;
 	uint32_t x, y;
 	struct jpeg_decompress_struct jpegd;
@@ -57,8 +57,7 @@ uint16_t *read_jpeg_stream(FILE *fp, const int color_type) {
 	if ((buffer = (JSAMPROW)calloc(stride, 1)) == NULL) {
 		goto error;
 	}
-	if ((img = allocate_image(jpegd.output_width, jpegd.output_height,
-							  0)) == NULL) {
+	if ((img = allocate_image(jpegd.output_width, jpegd.output_height)) == NULL) {
 		goto error;
 	}
 
@@ -95,7 +94,7 @@ error:
 	return img;
 }
 
-uint16_t *allocate_image(uint32_t width, uint32_t height, uint8_t type) {
+uint16_t *allocate_image(uint32_t width, uint32_t height) {
 	uint16_t *img;
 	if ((img = (uint16_t*)malloc(width*height*sizeof(uint16_t))) == NULL) {
 		goto error;

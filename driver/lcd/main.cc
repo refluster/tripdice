@@ -217,7 +217,7 @@ void setup() {
 
 void loop() {
 	puts("img load begin");
-	uint16_t *img = read_jpeg_file("test.jpg", 0);
+	uint16_t *img = read_jpeg_file("test.jpg");
 	puts("img load complete");
 	DispImage(img);
 	puts("img display complete");
