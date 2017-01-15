@@ -95,14 +95,6 @@ image_t *allocate_image(uint32_t width, uint32_t height, uint8_t type) {
   img->width = width;
   img->height = height;
   img->color_type = type;
-  if (type == COLOR_TYPE_INDEX) {
-    if ((img->palette = (color_t*)calloc(256, sizeof(color_t))) == NULL) {
-      goto error;
-    }
-  } else {
-    img->palette = NULL;
-  }
-  img->palette_num = 0;
   if ((img->map = (pixcel_t**)calloc(height, sizeof(pixcel_t*))) == NULL) {
     goto error;
   }
@@ -121,9 +113,6 @@ void free_image(image_t *img) {
   uint32_t i;
   if (img == NULL) {
     return;
-  }
-  if (img->palette != NULL) {
-    free(img->palette);
   }
   for (i = 0; i < img->height; i++) {
     free(img->map[i]);

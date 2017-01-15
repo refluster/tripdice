@@ -39,10 +39,11 @@ typedef enum result_t {
   FAILURE = -1, /**< 失敗 */
 } result_t;
 
-#define COLOR_TYPE_INDEX 0   /**< インデックスカラー方式 */
-#define COLOR_TYPE_GRAY  1   /**< グレースケール方式 */
-#define COLOR_TYPE_RGB   2   /**< RGB方式 */
-#define COLOR_TYPE_RGBA  3   /**< RGBA方式 */
+enum {
+	COLOR_TYPE_GRAY = 0,   /**< グレースケール方式 */
+	COLOR_TYPE_RGB,   /**< RGB方式 */
+	COLOR_TYPE_RGBA,   /**< RGBA方式 */
+};
 
 /**
  * @brief 色情報
@@ -82,8 +83,6 @@ typedef struct image_t {
   uint32_t width;       /**< 幅 */
   uint32_t height;      /**< 高さ */
   uint16_t color_type;  /**< 色表現の種別 */
-  uint16_t palette_num; /**< カラーパレットの数 */
-  color_t *palette;     /**< カラーパレットへのポインタ */
   pixcel_t **map;       /**< 画像データ */
 } image_t;
 
