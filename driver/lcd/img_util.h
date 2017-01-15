@@ -8,29 +8,29 @@ enum {
 };
 
 typedef struct color_t {
-	uint8_t r; /**< Red */
-	uint8_t g; /**< Green */
-	uint8_t b; /**< Blue */
-	uint8_t a; /**< Alpha */
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
 } color_t;
 
 typedef union pixcel_t {
-	color_t c; /**< RGBA */
-	uint8_t g; /**< グレースケール */
-	uint8_t i; /**< カラーインデックス */
+	color_t c;
+	uint8_t g;
+	uint8_t i;
 } pixcel_t;
 
 typedef struct image_t {
-	uint32_t width;       /**< 幅 */
-	uint32_t height;      /**< 高さ */
-	uint16_t color_type;  /**< 色表現の種別 */
-	pixcel_t **map;       /**< 画像データ */
+	uint32_t width;
+	uint32_t height;
+	uint color_type;
+	pixcel_t **map;
 } image_t;
 
 image_t *allocate_image(uint32_t width, uint32_t height, uint8_t type);
 void free_image(image_t *img);
 
-image_t *read_jpeg_file(const char *filename);
-image_t *read_jpeg_stream(FILE *fp);
+image_t *read_jpeg_file(const char *filename, const int color_type);
+image_t *read_jpeg_stream(FILE *fp, const int color_type);
 
-#endif /* IMAGE_H_ */
+#endif

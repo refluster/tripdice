@@ -17,18 +17,18 @@ static void error_exit(j_common_ptr cinfo) {
 	longjmp(err->jmpbuf, 1);
 }
 
-image_t *read_jpeg_file(const char *filename) {
+image_t *read_jpeg_file(const char *filename, const int color_type) {
 	FILE *fp;
 	if ((fp = fopen(filename, "rb")) == NULL) {
 		perror(filename);
 		return NULL;
 	}
-	image_t *img = read_jpeg_stream(fp);
+	image_t *img = read_jpeg_stream(fp, color_type);
 	fclose(fp);
 	return img;
 }
 
-image_t *read_jpeg_stream(FILE *fp) {
+image_t *read_jpeg_stream(FILE *fp, const int color_type) {
 	int success = 0;
 	uint32_t x, y;
 	struct jpeg_decompress_struct jpegd;
@@ -122,5 +122,5 @@ void free_image(image_t *img) {
 }
 
 int main() {
-	read_jpeg_file("test.jpg");
+	read_jpeg_file("test.jpg", COLOR_TYPE_RGB);
 }
