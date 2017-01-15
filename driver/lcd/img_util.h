@@ -14,17 +14,10 @@ typedef struct color_t {
 	uint8_t a;
 } color_t;
 
-typedef union pixcel_t {
-	color_t c;
-	uint8_t g;
-	uint8_t i;
-} pixcel_t;
-
 typedef struct image_t {
 	uint32_t width;
 	uint32_t height;
 	unsigned int color_type;
-	pixcel_t **map;
 	uint16_t *bin;
 } image_t;
 

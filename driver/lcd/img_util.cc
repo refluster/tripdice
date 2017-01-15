@@ -104,14 +104,6 @@ image_t *allocate_image(uint32_t width, uint32_t height, uint8_t type) {
 	img->width = width;
 	img->height = height;
 	img->color_type = type;
-	if ((img->map = (pixcel_t**)calloc(height, sizeof(pixcel_t*))) == NULL) {
-		goto error;
-	}
-	for (i = 0; i < height; i++) {
-		if ((img->map[i] = (pixcel_t*)calloc(width, sizeof(pixcel_t))) == NULL) {
-			goto error;
-		}
-	}
 	if ((img->bin = (uint16_t*)malloc(width*height*sizeof(uint16_t))) == NULL) {
 		goto error;
 	}
@@ -126,10 +118,6 @@ void free_image(image_t *img) {
 	if (img == NULL) {
 		return;
 	}
-	for (i = 0; i < img->height; i++) {
-		free(img->map[i]);
-	}
-	free(img->map);
 	free(img->bin);
 	free(img);
 }
