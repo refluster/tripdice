@@ -1,6 +1,8 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <getopt.h>
 #include "img_util.h"
 
 #define ROW 320
@@ -254,7 +256,54 @@ void loop() {
 
 }
 
-int main() {
+int main(int argc, char **argv) {
+	struct option longopts[] = {
+		{ "on",        no_argument,       NULL, 0   },
+		{ "off",       no_argument,       NULL, 1   },
+		{ "update",    required_argument, NULL, 2   },
+		{ 0,           0,                 0,    0   },
+		//no_argument
+		//required_argument
+	};
+	int opt;
+	int longindex;
+	int f_update = 0;
+	int f_on = 0;
+	int f_off = 0;
+	int disp_no = 0;
+
+	while ((opt = getopt_long(argc, argv, "", longopts, &longindex)) != -1) {
+		switch (opt) {
+		case 0: // on
+			printf("power on lcd module (not implemented)\n");
+			break;
+		case 1: // off
+			printf("power off lcd module (not implemented)\n");
+			break;
+		case 2: // update
+			printf("update display from %s\n", (*optarg == '-') ? "stdin": optarg);
+			break;
+		default:
+			printf("error! \'%c\' \'%c\'\n", opt, optopt);
+			return 1;
+		}
+	}
+
+	if (optind + 1 > argc) {
+		puts("lack of argument");
+		return 2;
+	}
+
+	disp_no = atoi(argv[optind]);
+
+/*
+	for (int i = optind; i < argc; i++) {
+		printf("arg = %s\n", argv[i]);
+	}
+*/
+
+	return 0;
+
 	setup();
 	loop();
 }
