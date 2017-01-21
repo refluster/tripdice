@@ -15,6 +15,8 @@
 
 #define SOFT_SPI
 
+#define min(a, b) (((a) < (b))? (a): (b))
+
 void SendDataSPI(unsigned char dat) {
 	int channel = 0;
 	int length = 1;
@@ -186,7 +188,7 @@ void DispImage(uint16_t *img) {
 	digitalWrite(pin_CS, 1);
 }
 
-void setup() {
+void gpio_setup() {
 	int channel = 0;
 	int speed = 1000000;
 
@@ -212,20 +214,10 @@ void setup() {
 	pinMode(pin_SCL, OUTPUT);
 #endif
 
-	LCD_Init();
-
 	puts("setup end");
 }
 
 void loop() {
-	puts("img load begin");
-	uint16_t *img = read_jpeg_file("test.jpg");
-	puts("img load complete");
-	DispImage(img);
-	puts("img display complete");
-
-	return;
-
 	puts("RED start");
 	DispColor(0xf800);   //RED
 	puts("RED end");
@@ -254,34 +246,64 @@ void loop() {
 	DispGradColor();
 	puts("grad end");
 
+	puts("img load begin");
+	uint16_t *img = read_jpeg_file("test.jpg");
+	puts("img load complete");
+	DispImage(img);
+	puts("img display complete");
 }
 
 int main(int argc, char **argv) {
 	struct option longopts[] = {
-		{ "on",        no_argument,       NULL, 0   },
-		{ "off",       no_argument,       NULL, 1   },
-		{ "update",    required_argument, NULL, 2   },
+		{ "init",      no_argument,       NULL, 0   },
+		{ "on",        no_argument,       NULL, 1   },
+		{ "off",       no_argument,       NULL, 2   },
+		{ "update",    required_argument, NULL, 3   },
+		{ "test",      required_argument, NULL, 4   },
 		{ 0,           0,                 0,    0   },
 		//no_argument
 		//required_argument
 	};
+
 	int opt;
 	int longindex;
-	int f_update = 0;
+
+	int disp_no = 0;
+	int f_init = 0;
 	int f_on = 0;
 	int f_off = 0;
-	int disp_no = 0;
+	int f_update = 0;
+	int f_test = 0;
+
+	char *update_file = NULL;
+	int test_no = 5;
+
+	gpio_setup();
 
 	while ((opt = getopt_long(argc, argv, "", longopts, &longindex)) != -1) {
 		switch (opt) {
-		case 0: // on
-			printf("power on lcd module (not implemented)\n");
+		case 0: // init
+			f_init = 1;
+			printf("init lcd module\n");
 			break;
-		case 1: // off
+		case 1: // on
+			f_on = 1;
+			printf("power on lcd module\n");
+			break;
+		case 2: // off
+			f_off = 1;
 			printf("power off lcd module (not implemented)\n");
 			break;
-		case 2: // update
+		case 3: // update
+			f_update = 1;
+			update_file = optarg;
 			printf("update display from %s\n", (*optarg == '-') ? "stdin": optarg);
+			break;
+		case 4: // test
+			f_test = 1;
+			puts("test");
+			test_no = min(atoi(optarg), 5);
+			printf("test lcd pattern %d\n", test_no);
 			break;
 		default:
 			printf("error! \'%c\' \'%c\'\n", opt, optopt);
@@ -296,6 +318,42 @@ int main(int argc, char **argv) {
 
 	disp_no = atoi(argv[optind]);
 
+	if (f_init) {
+		LCD_Init();
+	} else if (f_on) {
+		// not implemented
+	} else if (f_off) {
+		// not impelemented
+	} else if (f_update) {
+		// not impelemented
+	} else if (f_test) {
+		printf("test lcd pattern %d\n", test_no);
+		switch(test_no) {
+		case 0:
+			DispColor(0xf800);
+			break;
+		case 1:
+			DispColor(0x07e0);
+			break;
+		case 2:
+			DispColor(0x001f);
+			break;
+		case 3:
+			DispColor(0xffff);
+			break;
+		case 4:
+			DispGradColor();
+			break;
+		case 5:
+			DispColor(0xf800);
+			DispColor(0x07e0);
+			DispColor(0x001f);
+			DispColor(0xffff);
+			DispGradColor();
+			break;
+		}
+	}
+
 /*
 	for (int i = optind; i < argc; i++) {
 		printf("arg = %s\n", argv[i]);
@@ -304,6 +362,7 @@ int main(int argc, char **argv) {
 
 	return 0;
 
-	setup();
+	gpio_setup();
+	LCD_Init();
 	loop();
 }
