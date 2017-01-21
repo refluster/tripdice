@@ -287,9 +287,14 @@ int main(int argc, char **argv) {
 		printf("power off lcd module (not implemented)\n");
 		// not impelemented
 	} else if (f_update) {
-		printf("update display from %s\n", (*optarg == '-') ? "stdin": optarg);
+		printf("update display from %s\n", (*update_file == '-') ? "stdin": update_file);
 		// not impelemented
 		uint16_t *img = read_jpeg_file("test.jpg");
+		if (optind + 1 > argc) {
+			puts("lack of argument");
+			return 2;
+		}
+		lcd_no = atoi(argv[optind]);
 		display_image(img);		
 	} else if (f_test) {
 		printf("test lcd pattern %d\n", test_no);
@@ -298,7 +303,6 @@ int main(int argc, char **argv) {
 			return 2;
 		}
 		lcd_no = atoi(argv[optind]);
-
 		switch(test_no) {
 		case 0:
 			display_color(0xf800);
