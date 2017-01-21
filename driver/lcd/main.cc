@@ -205,52 +205,12 @@ void gpio_setup() {
 		return;
 	}
 
-	puts("setup start");
-
 	pinMode(pin_CS, OUTPUT);
 	pinMode(pin_RST, OUTPUT);
 #ifdef SOFT_SPI
 	pinMode(pin_SDA, OUTPUT);
 	pinMode(pin_SCL, OUTPUT);
 #endif
-
-	puts("setup end");
-}
-
-void loop() {
-	puts("RED start");
-	display_color(0xf800);   //RED
-	puts("RED end");
-
-	delay(1000);
-
-	puts("GREEN start");
-	display_color(0x07e0);   //GREEN
-	puts("GREEN end");
-
-	delay(1000);
-
-	puts("BLUE start");
-	display_color(0x001f);   //BLUE
-	puts("BLUE end");
-
-	delay(1000);
-
-	puts("WHITE start");
-	display_color(0xffff);   //WHITE
-	puts("WHITE end");
-
-	delay(1000);
-
-	puts("grad start");
-	display_gradation();
-	puts("grad end");
-
-	puts("img load begin");
-	uint16_t *img = read_jpeg_file("test.jpg");
-	puts("img load complete");
-	display_image(img);
-	puts("img display complete");
 }
 
 int main(int argc, char **argv) {
@@ -353,15 +313,5 @@ int main(int argc, char **argv) {
 		}
 	}
 
-/*
-	for (int i = optind; i < argc; i++) {
-		printf("arg = %s\n", argv[i]);
-	}
-*/
-
 	return 0;
-
-	gpio_setup();
-	lcd_init();
-	loop();
 }
