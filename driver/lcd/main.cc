@@ -17,7 +17,7 @@
 
 #define min(a, b) (((a) < (b))? (a): (b))
 
-void SendDataSPI(unsigned char dat) {
+void send_data_spi(unsigned char dat) {
 	int channel = 0;
 	int length = 1;
 
@@ -40,28 +40,28 @@ void SendDataSPI(unsigned char dat) {
 #endif
 }
 
-void WriteComm(unsigned int i) {
+void write_comm(unsigned int i) {
 	digitalWrite(pin_CS, 0);
-	SendDataSPI(0x70);
-	SendDataSPI(i >> 8);
-	SendDataSPI(i);
+	send_data_spi(0x70);
+	send_data_spi(i >> 8);
+	send_data_spi(i);
 	digitalWrite(pin_CS, 1);
 }
 
-void WriteData(unsigned int i) {
+void write_data(unsigned int i) {
 	digitalWrite(pin_CS, 0);
-	SendDataSPI(0x72);
-	SendDataSPI(i >> 8);
-	SendDataSPI(i);
+	send_data_spi(0x72);
+	send_data_spi(i >> 8);
+	send_data_spi(i);
 	digitalWrite(pin_CS, 1);
 }
 
 void LCD_CtrlWrite_ILI9325C(unsigned int com, unsigned int dat) {
-	WriteComm(com);
-	WriteData(dat);
+	write_comm(com);
+	write_data(dat);
 }
 
-void LCD_Init(void) {
+void lcd_init(void) {
 	digitalWrite(pin_RST, 1);
 
 	delay(100);
@@ -138,51 +138,51 @@ void LCD_Init(void) {
 	LCD_CtrlWrite_ILI9325C(0x0007, 0x0133);      // 262K color and display ON
 }
 
-void BlockWrite(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsigned int Yend) {
-	WriteComm(0x0050); WriteData(Xstart);
-	WriteComm(0x0051); WriteData(Xend);
-	WriteComm(0x0052); WriteData(Ystart);
-	WriteComm(0x0053); WriteData(Yend);
-	WriteComm(0x0020);
-	WriteData(Xstart);
-	WriteComm(0x0021);
-	WriteData(Ystart);
-	WriteComm(0x0022);
+void block_write(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsigned int Yend) {
+	write_comm(0x0050); write_data(Xstart);
+	write_comm(0x0051); write_data(Xend);
+	write_comm(0x0052); write_data(Ystart);
+	write_comm(0x0053); write_data(Yend);
+	write_comm(0x0020);
+	write_data(Xstart);
+	write_comm(0x0021);
+	write_data(Ystart);
+	write_comm(0x0022);
 }
 
-void DispColor(unsigned int color) {
+void display_color(unsigned int color) {
 	unsigned int i, j;
 	digitalWrite(pin_CS, 0);
-	BlockWrite(0, COL - 1, 0, ROW - 1);
+	block_write(0, COL - 1, 0, ROW - 1);
 	for(i = 0; i < ROW; i++) {
 		for(j = 0; j < COL; j++) {
-			WriteData(color);
+			write_data(color);
 		}
 	}
 	digitalWrite(pin_CS, 1);
 }
 
-void DispGradColor() {
+void display_gradation() {
 	unsigned int i, j;
 	digitalWrite(pin_CS, 0);
-	BlockWrite(0, COL - 1, 0, ROW - 1);
+	block_write(0, COL - 1, 0, ROW - 1);
 	for(i = 0; i < ROW; i++) {
 		for(j = 0; j < COL; j++) {
 			int color = ((i / 5) << 11) | ((j / 5) << 5);
-			WriteData(color);
+			write_data(color);
 		}
 	}
 	digitalWrite(pin_CS, 1);
 }
 
-void DispImage(uint16_t *img) {
+void display_image(uint16_t *img) {
 	unsigned int i, j;
 	digitalWrite(pin_CS, 0);
-	BlockWrite(0, COL - 1, 0, ROW - 1);
+	block_write(0, COL - 1, 0, ROW - 1);
 	for(i = 0; i < ROW; i++) {
 		for(j = 0; j < COL; j++) {
 			int color = img[i*COL + j];
-			WriteData(color);
+			write_data(color);
 		}
 	}
 	digitalWrite(pin_CS, 1);
@@ -219,37 +219,37 @@ void gpio_setup() {
 
 void loop() {
 	puts("RED start");
-	DispColor(0xf800);   //RED
+	display_color(0xf800);   //RED
 	puts("RED end");
 
 	delay(1000);
 
 	puts("GREEN start");
-	DispColor(0x07e0);   //GREEN
+	display_color(0x07e0);   //GREEN
 	puts("GREEN end");
 
 	delay(1000);
 
 	puts("BLUE start");
-	DispColor(0x001f);   //BLUE
+	display_color(0x001f);   //BLUE
 	puts("BLUE end");
 
 	delay(1000);
 
 	puts("WHITE start");
-	DispColor(0xffff);   //WHITE   
+	display_color(0xffff);   //WHITE
 	puts("WHITE end");
 
 	delay(1000);
 
 	puts("grad start");
-	DispGradColor();
+	display_gradation();
 	puts("grad end");
 
 	puts("img load begin");
 	uint16_t *img = read_jpeg_file("test.jpg");
 	puts("img load complete");
-	DispImage(img);
+	display_image(img);
 	puts("img display complete");
 }
 
@@ -319,7 +319,7 @@ int main(int argc, char **argv) {
 	disp_no = atoi(argv[optind]);
 
 	if (f_init) {
-		LCD_Init();
+		lcd_init();
 	} else if (f_on) {
 		// not implemented
 	} else if (f_off) {
@@ -327,29 +327,28 @@ int main(int argc, char **argv) {
 	} else if (f_update) {
 		// not impelemented
 	} else if (f_test) {
-		printf("test lcd pattern %d\n", test_no);
 		switch(test_no) {
 		case 0:
-			DispColor(0xf800);
+			display_color(0xf800);
 			break;
 		case 1:
-			DispColor(0x07e0);
+			display_color(0x07e0);
 			break;
 		case 2:
-			DispColor(0x001f);
+			display_color(0x001f);
 			break;
 		case 3:
-			DispColor(0xffff);
+			display_color(0xffff);
 			break;
 		case 4:
-			DispGradColor();
+			display_gradation();
 			break;
 		case 5:
-			DispColor(0xf800);
-			DispColor(0x07e0);
-			DispColor(0x001f);
-			DispColor(0xffff);
-			DispGradColor();
+			display_color(0xf800);
+			display_color(0x07e0);
+			display_color(0x001f);
+			display_color(0xffff);
+			display_gradation();
 			break;
 		}
 	}
@@ -363,6 +362,6 @@ int main(int argc, char **argv) {
 	return 0;
 
 	gpio_setup();
-	LCD_Init();
+	lcd_init();
 	loop();
 }
