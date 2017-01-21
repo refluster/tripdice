@@ -288,8 +288,14 @@ int main(int argc, char **argv) {
 		// not impelemented
 	} else if (f_update) {
 		printf("update display from %s\n", (*update_file == '-') ? "stdin": update_file);
-		// not impelemented
-		uint16_t *img = read_jpeg_file("test.jpg");
+		uint16_t *img;
+		if (*update_file == '-') {
+			puts("read bin");
+			img = (uint16_t*)malloc(sizeof(uint16_t)*320*240);
+			fread(img, sizeof(uint16_t), 320*240, stdin);
+		} else {
+			img = read_jpeg_file(update_file);
+		}
 		if (optind + 1 > argc) {
 			puts("lack of argument");
 			return 2;
