@@ -167,15 +167,20 @@ void display_gradation() {
 	int r, g, b;
 	digitalWrite(pin_CS, 0);
 	block_write(0, COL - 1, 0, ROW - 1);
-	r = g = b = 0;
+	r = ROW/2 - 1;
+	b = 0;
 	for(i = 0; i < ROW; i++) {
 		g = 0;
 		for(j = 0; j < COL; j++) {
-			int color = ((r / 5) << 11) | ((g / 5) << 5) | b;
+			int color = ((r / 5) << 11) | ((g / 5) << 5) | ((b / 5)) ;
 			write_data(color);
 			++g;
 		}
-		++r;
+		if (i < ROW/2) {
+			--r;
+		} else {
+			++b;
+		}
 	}
 	digitalWrite(pin_CS, 1);
 }
