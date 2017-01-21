@@ -163,14 +163,19 @@ void display_color(unsigned int color) {
 }
 
 void display_gradation() {
-	unsigned int i, j;
+	int i, j;
+	int r, g, b;
 	digitalWrite(pin_CS, 0);
 	block_write(0, COL - 1, 0, ROW - 1);
+	r = g = b = 0;
 	for(i = 0; i < ROW; i++) {
+		g = 0;
 		for(j = 0; j < COL; j++) {
-			int color = ((i / 5) << 11) | ((j / 5) << 5);
+			int color = ((r / 5) << 11) | ((g / 5) << 5) | b;
 			write_data(color);
+			++g;
 		}
+		++r;
 	}
 	digitalWrite(pin_CS, 1);
 }
