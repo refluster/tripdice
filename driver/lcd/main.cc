@@ -218,7 +218,9 @@ void gpio_setup() {
 		return;
 	}
 
-	pinMode(pin_CS[lcd_no], OUTPUT);
+	for (int i = 0; i < sizeof(pin_CS)/sizeof(pin_CS[0]); i++) {
+		pinMode(pin_CS[i], OUTPUT);
+	}
 	pinMode(pin_RST, OUTPUT);
 #ifdef SOFT_SPI
 	pinMode(pin_SDA, OUTPUT);
