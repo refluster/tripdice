@@ -23,8 +23,6 @@ App.prototype.start = function() {
 		}.bind(this));
 	}.bind(this));
 
-//	return;
-
 	// server settings
 	this.app.set('port', 80);
 	this.app.set('view engine', 'ejs');
