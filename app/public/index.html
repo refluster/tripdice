@@ -12,11 +12,20 @@
     <link rel="stylesheet" href="css/sky.css" />
 -->
     <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-route.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
   </head>
   <body ng-app="App">
     <div id="contents" ng-controller="cMain">
-      hoge
+
+      <ng-view></ng-view>
+
+      <script type="text/ng-template" id="index-tmpl">
+        <input type="file" id="file">
+        <div id="output"></div>
+        <img id="thumb">
+        <canvas id="virtual-canvas"></canvas>
+      </script>
     </div>
   </body>
 </html>
