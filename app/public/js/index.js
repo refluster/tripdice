@@ -29,17 +29,17 @@ app.controller('cList', ['$scope', function($scope) {
 	$scope.thumb.onload = function() {
 		$scope.ctx.drawImage($scope.thumb, 0, 0, $scope.thumb.width, $scope.thumb.height,
 							 0, 0, 320, 240);
-		rgb = $scope.ctx.getImageData(0, 0, 320, 240).data;
-		var buf = new ArrayBuffer(320*240*2);
-		var u16 = new Uint16Array(buf);
-		var wIdx = 0;
+		rgba = $scope.ctx.getImageData(0, 0, 320, 240).data;
+		var u16 = new Uint16Array(new ArrayBuffer(320*240*2));
 
+		// convert from 32bit rgba to 16bit rgb image
+		var wIdx = 0;
 		for (var x = 0; x < 320; x++) {
 			for (var y = 0; y < 240; y++) {
 				var index = (y*320 + x)*4;
-				var r = rgb[index + 0];
-				var g = rgb[index + 1];
-				var b = rgb[index + 2];
+				var r = rgba[index + 0];
+				var g = rgba[index + 1];
+				var b = rgba[index + 2];
 				var dat = (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3));
 				u16[wIdx] = dat;
 				++wIdx;
@@ -47,8 +47,8 @@ app.controller('cList', ['$scope', function($scope) {
 		}
 
 		console.log(u16);
-		console.log(rgb);
-		console.log(rgb.length);
+		console.log(rgba);
+		console.log(rgba.length);
 	};
 }]);
 
