@@ -46,6 +46,10 @@ app.controller('cList', ['$scope', function($scope) {
 			}
 		}
 
+		// Uint16Array -> Uint8Array -> base64
+		var b64 = btoa(Array.from(new Uint8Array(u16.buffer),
+								  e => String.fromCharCode(e)).join(''));
+
 		console.log(u16);
 		console.log(rgba);
 		console.log(rgba.length);
