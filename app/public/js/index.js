@@ -25,5 +25,10 @@ app.controller('cList', ['$scope', function($scope) {
 		}
 		fileReader.readAsDataURL(this.files[0]);
 	});
+
+	$scope.thumb.onload = function() {
+		$scope.ctx.drawImage($scope.thumb, 0, 0, $scope.thumb.width, $scope.thumb.height,
+							 0, 0, 320, 240);
+	};
 }]);
 
