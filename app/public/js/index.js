@@ -42,7 +42,7 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 
 			// convert from 32bit rgba to 16bit rgb image
 			var wIdx = 0;
-			for (var x = 0; x < 320; x++) {
+			for (var x = 320 - 1; x >= 0; x--) {
 				for (var y = 0; y < 240; y++) {
 					var index = (y*320 + x)*4;
 					var r = rgba[index + 0];
