@@ -18,11 +18,6 @@ App.prototype.start = function() {
 	// lcd
 	this.lcd = require('./lib/lcd');
 	this.lcd.init(function() {
-		this.fs.readFile('./test.bin', function (err, data) {
-			console.log('update')
-			this.lcd.update('1', data);
-			console.log(data);
-		}.bind(this));
 	}.bind(this));
 
 	// server settings
