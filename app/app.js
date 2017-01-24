@@ -21,6 +21,7 @@ App.prototype.start = function() {
 		this.fs.readFile('./test.bin', function (err, data) {
 			console.log('update')
 			this.lcd.update('1', data);
+			console.log(data);
 		}.bind(this));
 	}.bind(this));
 
@@ -40,8 +41,13 @@ App.prototype.start = function() {
 
 	this.app.post('/api', function(req, res) {
 		console.log('api received');
-		console.log(req.body);
-		this.lcd.update(req.body.lcd_no, req.body.b64);
+//		console.log(req.body);
+
+		var data = new Buffer(req.body.b64, 'base64');
+//		console.log(b64.length);
+		console.log(data);
+//		console.log(data.length);
+		this.lcd.update(req.body.lcd_no, data);
 
 		res.send('ok');
 	}.bind(this));
