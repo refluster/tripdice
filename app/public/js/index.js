@@ -50,16 +50,18 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 		var b64 = btoa(Array.from(new Uint8Array(u16.buffer),
 								  e => String.fromCharCode(e)).join(''));
 
+		console.log(b64.length);
+
 		$http({
 			method : 'POST',
 			url : 'api',
-			data: {name: 'hoge', url: 'hoge.html'}
+			data: {method: 'update', lcd_no: 1, b64: b64}
 		}).then(function mySucces(response) {
 			console.log('succeed');
-			$scope.myWelcome = response.data;
+			console.log(response.data);
 		}, function myError(response) {
 			console.log('failed');
-			$scope.myWelcome = response.statusText;
+			console.log(response.statusText);
 		});
 
 		console.log(u16);

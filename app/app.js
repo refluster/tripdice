@@ -29,8 +29,8 @@ App.prototype.start = function() {
 	this.app.set('view engine', 'ejs');
 	this.app.use(this.express.static(this.path.join(__dirname, 'public')));
 
-	this.app.use(this.bodyParser.urlencoded({extended: true}));
-	this.app.use(this.bodyParser.json());
+	this.app.use(this.bodyParser.urlencoded({limit:'1mb', extended: true}));
+	this.app.use(this.bodyParser.json({limit: '1mb'}));
 
 	// start server
 	this.server = this.http.createServer(this.app);
@@ -41,8 +41,10 @@ App.prototype.start = function() {
 	this.app.post('/api', function(req, res) {
 		console.log('api received');
 		console.log(req.body);
+		this.lcd.update(req.body.lcd_no, req.body.b64);
+
 		res.send('ok');
-	});
+	}.bind(this));
 }
 
 app = new App();
