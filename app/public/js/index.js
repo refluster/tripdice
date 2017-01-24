@@ -16,15 +16,18 @@ app.controller('cMain', ['$scope', function($scope) {
 
 app.controller('cList', ['$scope', '$http', function($scope, $http) {
 	$scope.ctx = document.getElementById('virtual-canvas').getContext('2d');
-	$scope.thumb = document.getElementById('thumb');
+	$scope.thumb = document.getElementById('image-thumbnail1');
 
-	document.getElementById('file').addEventListener('change', function() {
-		var fileReader = new FileReader() ;
-		fileReader.onload = function() {
-			$scope.thumb.setAttribute('src', this.result);
-		}
-		fileReader.readAsDataURL(this.files[0]);
-	});
+	// trigger to update image
+	Array.prototype.forEach.call(document.getElementsByClassName('image-selector'), function(elem) {
+		elem.addEventListener('change', function(e) {
+			var fileReader = new FileReader() ;
+			fileReader.onload = function() {
+				$scope.thumb.setAttribute('src', this.result);
+			}
+			fileReader.readAsDataURL(this.files[0]);
+		});
+	}.bind(this));
 
 	$scope.thumb.onload = function() {
 		$scope.ctx.drawImage($scope.thumb,
