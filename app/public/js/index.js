@@ -25,17 +25,14 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 	// trigger to update image
 	Array.prototype.forEach.call(document.getElementsByClassName('image-selector'), function(elem) {
 		var idx = getIntFromTailOfString(elem.id);
-		console.log(elem.id);
-		console.log(idx);
 		elem.addEventListener('change', function(e) {
 			var fileReader = new FileReader() ;
 			fileReader.onload = function() {
-				console.log(idx);
-				console.log($scope.thumb);
 				$scope.thumb[idx].setAttribute('src', this.result);
 			}
 			fileReader.readAsDataURL(this.files[0]);
 		});
+		// send image when image element is updated
 		$scope.thumb[idx].onload = function() {
 			$scope.ctx.drawImage($scope.thumb[idx],
 								 0, 0, $scope.thumb[idx].naturalWidth, $scope.thumb[idx].naturalHeight,
@@ -61,9 +58,6 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 			var b64 = btoa(Array.from(new Uint8Array(u16.buffer),
 									  e => String.fromCharCode(e)).join(''));
 
-			console.log(b64.length);
-
-			console.log('idx: --- ' + idx);
 			$http({
 				method : 'POST',
 				url : 'api',
@@ -75,10 +69,6 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 				console.log('failed');
 				console.log(response.statusText);
 			});
-
-			console.log(u16);
-			console.log(rgba);
-			console.log(rgba.length);
 		};
 	}.bind(this));
 }]);
