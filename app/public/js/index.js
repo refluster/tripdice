@@ -14,7 +14,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 app.controller('cMain', ['$scope', function($scope) {
 }]);
 
-app.controller('cList', ['$scope', function($scope) {
+app.controller('cList', ['$scope', '$http', function($scope, $http) {
 	$scope.ctx = document.getElementById('virtual-canvas').getContext('2d');
 	$scope.thumb = document.getElementById('thumb');
 
@@ -49,6 +49,18 @@ app.controller('cList', ['$scope', function($scope) {
 		// Uint16Array -> Uint8Array -> base64
 		var b64 = btoa(Array.from(new Uint8Array(u16.buffer),
 								  e => String.fromCharCode(e)).join(''));
+
+		$http({
+			method : 'POST',
+			url : 'api',
+			data: {name: 'hoge', url: 'hoge.html'}
+		}).then(function mySucces(response) {
+			console.log('succeed');
+			$scope.myWelcome = response.data;
+		}, function myError(response) {
+			console.log('failed');
+			$scope.myWelcome = response.statusText;
+		});
 
 		console.log(u16);
 		console.log(rgba);
