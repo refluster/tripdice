@@ -27,7 +27,8 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 	});
 
 	$scope.thumb.onload = function() {
-		$scope.ctx.drawImage($scope.thumb, 0, 0, $scope.thumb.width, $scope.thumb.height,
+		$scope.ctx.drawImage($scope.thumb,
+							 0, 0, $scope.thumb.naturalWidth, $scope.thumb.naturalHeight,
 							 0, 0, 320, 240);
 		rgba = $scope.ctx.getImageData(0, 0, 320, 240).data;
 		var u16 = new Uint16Array(new ArrayBuffer(320*240*2));
