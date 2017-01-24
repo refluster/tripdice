@@ -36,12 +36,7 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 			}
 			fileReader.readAsDataURL(this.files[0]);
 		});
-	}.bind(this));
-
-	Array.prototype.forEach.call($scope.thumb, function(elem) {
-		var idx = getIntFromTailOfString(elem.id);
-
-		elem.onload = function() {
+		$scope.thumb[idx].onload = function() {
 			$scope.ctx.drawImage($scope.thumb[idx],
 								 0, 0, $scope.thumb[idx].naturalWidth, $scope.thumb[idx].naturalHeight,
 								 0, 0, 320, 240);
@@ -85,6 +80,6 @@ app.controller('cList', ['$scope', '$http', function($scope, $http) {
 			console.log(rgba);
 			console.log(rgba.length);
 		};
-	});
+	}.bind(this));
 }]);
 
