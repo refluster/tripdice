@@ -45,6 +45,7 @@ App.prototype.start = function() {
 
 		var data = new Buffer(req.body.b64, 'base64');
 //		console.log(b64.length);
+		console.log(req.body.lcd_no);
 		console.log(data);
 //		console.log(data.length);
 		this.lcd.update(req.body.lcd_no, data);

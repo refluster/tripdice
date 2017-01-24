@@ -12,7 +12,7 @@ exports.init = function(callback) {
 };
 
 exports.update = function(lcd_no, data, callback) {
-	var p = spawn(lcdcmd, ['1', '--update', '-']);
+	var p = spawn(lcdcmd, [lcd_no, '--update', '-']);
 	p.stdin.write(data);
 	p.on('exit', function(code) {
 		if (callback !== undefined) {
