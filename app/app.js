@@ -22,7 +22,6 @@ App.prototype.start = function() {
 
 	// server settings
 	this.app.set('port', 80);
-	this.app.set('view engine', 'ejs');
 	this.app.use(this.express.static(this.path.join(__dirname, 'public')));
 
 	this.app.use(this.bodyParser.urlencoded({limit:'1mb', extended: true}));
