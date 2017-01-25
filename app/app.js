@@ -35,15 +35,10 @@ App.prototype.start = function() {
 
 	this.app.post('/api', function(req, res) {
 		console.log('api received');
-//		console.log(req.body);
-
 		var data = new Buffer(req.body.b64, 'base64');
-//		console.log(b64.length);
 		console.log(req.body.lcd_no);
 		console.log(data);
-//		console.log(data.length);
 		this.lcd.update(req.body.lcd_no, data);
-
 		res.send('ok');
 	}.bind(this));
 }
