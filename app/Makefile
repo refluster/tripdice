@@ -4,4 +4,4 @@ PATH:=$(HOME)/node-v6.9.4-linux-armv7l/bin:$(PATH)
 PATH:=$(HOME)/node-v6.9.4-linux-armv6l/bin:$(PATH)
 
 run:
-	env PATH="$(PATH)" NODE_PATH="$(NODE_PATH)" sudo node app.js
+	sudo env PATH="$(PATH)" NODE_PATH="$(NODE_PATH)" node app.js
