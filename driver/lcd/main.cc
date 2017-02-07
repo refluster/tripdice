@@ -13,7 +13,7 @@
 const int pin_CS[] = {5, 6, 13, 19, 26, 21};
 const int pin_SDA = 10;
 const int pin_SCL = 11;
-const int pin_RST = 20;
+const int pin_RST[] = {20, 16, 12, 25, 24, 23};
 
 static int lcd_no = 0;
 
@@ -62,15 +62,22 @@ void LCD_CtrlWrite_ILI9325C(unsigned int com, unsigned int dat) {
 }
 
 void lcd_init(void) {
-	digitalWrite(pin_RST, 1);
+	for (lcd_no = 0; lcd_no < sizeof(pin_RST)/sizeof(pin_RST[0]); lcd_no++) {
+		digitalWrite(pin_RST[lcd_no], 1);
+	}
 
 	delay(100);
-	digitalWrite(pin_RST ,0);
+
+	for (lcd_no = 0; lcd_no < sizeof(pin_RST)/sizeof(pin_RST[0]); lcd_no++) {
+		digitalWrite(pin_RST[lcd_no] ,0);
+	}
 	delay(500);
  
-	digitalWrite(pin_RST, 1);
+	for (lcd_no = 0; lcd_no < sizeof(pin_RST)/sizeof(pin_RST[0]); lcd_no++) {
+		digitalWrite(pin_RST[lcd_no], 1);
+	}
 	delay(500);
- 
+
 	for (lcd_no = 0; lcd_no < sizeof(pin_CS)/sizeof(pin_CS[0]); lcd_no++) {
 		printf("init %d\n", lcd_no);
 
@@ -220,8 +227,8 @@ void gpio_setup() {
 
 	for (int i = 0; i < sizeof(pin_CS)/sizeof(pin_CS[0]); i++) {
 		pinMode(pin_CS[i], OUTPUT);
+		pinMode(pin_RST[i], OUTPUT);
 	}
-	pinMode(pin_RST, OUTPUT);
 #ifdef SOFT_SPI
 	pinMode(pin_SDA, OUTPUT);
 	pinMode(pin_SCL, OUTPUT);
